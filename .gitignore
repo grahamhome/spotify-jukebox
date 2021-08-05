@@ -29,3 +29,8 @@ MANIFEST
 # Development
 venv/
 .idea/
+.env
+
+# Runtime
+.flask_session/
+.spotify_caches/

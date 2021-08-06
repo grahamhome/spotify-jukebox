@@ -4,4 +4,4 @@ Sync your lights and music!
 ## Current progress:
 ![](working.png)
 
-*Spotify API giving me the name of the song I'm playing on my phone (and a lot of other info about the song, album, etc)*
+*Backend API serving up the name, artist & album info, and the RGB colors found in the album artwork (ordered by percentage of pixels with each color)!*

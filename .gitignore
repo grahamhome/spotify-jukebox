@@ -30,6 +30,7 @@ MANIFEST
 venv/
 .idea/
 .env
+gcloud_creds.json
 
 # Runtime
 .flask_session/

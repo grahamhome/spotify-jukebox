@@ -24,11 +24,14 @@ Run app.py
 """
 
 import os
+from pprint import pprint, pformat
+
 from flask import Flask, session, request, redirect
 from flask_session import Session
 import spotipy
 import uuid
 from dotenv import load_dotenv
+from gcloud_control import get_image_colors
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(64)
@@ -105,9 +108,33 @@ def currently_playing():
         return redirect('/')
     spotify = spotipy.Spotify(auth_manager=auth_manager)
     track = spotify.current_user_playing_track()
+    print(track)
     if not track is None:
         return track
     return "No track currently playing."
+
+
+@app.route('/currently_playing_data')
+def currently_playing_data():
+    """
+    Returns information related to the currently playing track.
+    :return:
+    """
+    cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
+    auth_manager = spotipy.oauth2.SpotifyOAuth(cache_handler=cache_handler)
+    if not auth_manager.validate_token(cache_handler.get_cached_token()):
+        return redirect('/')
+    spotify = spotipy.Spotify(auth_manager=auth_manager)
+    track = spotify.current_user_playing_track()
+    track_data = {}
+    if track:
+        track_data["title"] = track.get("item").get("name")
+        track_data["artists"] = [artist.get("name") for artist in track.get("item").get("artists")]
+        track_data["album"] = track.get("item").get("album").get("name")
+        track_data["album_art"] = track.get("item").get("album").get("images")[0].get("url")
+        track_data["album_art_colors"] = get_image_colors(track_data["album_art"])
+    return track_data
+
 
 
 @app.route('/current_user')

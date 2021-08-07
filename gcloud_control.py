@@ -19,6 +19,6 @@ def get_image_colors(image_url):
                 response.error.message))
 
     return sorted([
-        [round(color.pixel_fraction*100, 2), f"#{int(color.color.red):X}{int(color.color.green):X}{int(color.color.blue):X}"]
+        [round(color.pixel_fraction*100, 2), f"rgb:{int(color.color.red)},{int(color.color.green)},{int(color.color.blue)}"]
         for color in response.image_properties_annotation.dominant_colors.colors if color.pixel_fraction > 0.009],
         key=lambda color: color[0], reverse=True)

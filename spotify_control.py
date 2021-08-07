@@ -32,6 +32,7 @@ import spotipy
 import uuid
 from dotenv import load_dotenv
 from gcloud_control import get_image_colors
+from lifx_control import list_lights, set_scene
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(64)
@@ -133,8 +134,14 @@ def currently_playing_data():
         track_data["album"] = track.get("item").get("album").get("name")
         track_data["album_art"] = track.get("item").get("album").get("images")[0].get("url")
         track_data["album_art_colors"] = get_image_colors(track_data["album_art"])
+        set_scene(track_data["album_art_colors"])
     return track_data
 
+@app.route("/lights")
+def lights():
+    lights = list_lights()
+    pprint(lights, indent=4)
+    return {"lights": lights}
 
 
 @app.route('/current_user')

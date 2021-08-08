@@ -35,3 +35,4 @@ gcloud_creds.json
 # Runtime
 .flask_session/
 .spotify_caches/
+.spotify_cache

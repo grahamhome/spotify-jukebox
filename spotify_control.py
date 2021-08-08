@@ -40,7 +40,7 @@ app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_FILE_DIR'] = './.flask_session/'
 Session(app)
 
-caches_folder = './.spotify_caches/'
+caches_folder = './.spotify_cache/'
 if not os.path.exists(caches_folder):
     os.makedirs(caches_folder)
 
@@ -159,7 +159,13 @@ Following lines allow application to be run more conveniently with
 `python app.py` (Make sure you're using python3)
 (Also includes directive to leverage pythons threading capacity.)
 '''
-if __name__ == '__main__':
-    load_dotenv()
+
+
+def main():
     app.run(threaded=True, port=int(os.environ.get("PORT",
                                                    os.environ.get("SPOTIPY_REDIRECT_URI", 8080).split(":")[-1])))
+
+
+if __name__ == '__main__':
+    main()
+

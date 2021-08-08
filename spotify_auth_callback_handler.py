@@ -6,8 +6,6 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
-spotify_auth_code_file = "spotify_code.secret"
-
 cache_path = './.spotify_cache'
 
 
@@ -22,6 +20,8 @@ def index():
         # Handle callback from Spotify auth page
         auth_manager.get_access_token(request.args.get("code"))
         return "You may now close this page."
+
+
 """
 Following lines allow application to be run more conveniently with
 `python app.py` (Make sure you're using python3)

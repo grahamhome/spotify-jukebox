@@ -31,7 +31,7 @@ class SpotifyClient:
     def now_playing(self):
         track = self.client.current_user_playing_track()
         if track:
-            if track.get("item").get("id") != self.current_track.get("id"):
+            if  track.get("item").get("id") != self.current_track.get("id"):
                 self.current_track["id"] = track.get("item").get("id")
                 self.current_track["title"] = track.get("item").get("name")
                 self.current_track["artists"] = [artist.get("name") for artist in track.get("item").get("artists")]

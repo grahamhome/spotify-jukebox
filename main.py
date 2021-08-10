@@ -11,6 +11,7 @@ class Jukebox:
     def __init__(self):
         self.spotify_client = SpotifyClient()
         self.lifx_switch = LifxSwitch()
+        self.lifx_switch.get_lights()
 
     def play(self):
         prev_track = None

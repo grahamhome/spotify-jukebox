@@ -11,6 +11,11 @@ cache_path = './.spotify_cache'
 
 @app.route('/')
 def index():
+    """
+    This route handles the callback from the Spotify authentication system by
+    saving the code included with the callback.
+    :return:
+    """
     cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=cache_path)
     auth_manager = spotipy.oauth2.SpotifyOAuth(scope='user-read-currently-playing playlist-modify-private',
                                                cache_handler=cache_handler,
@@ -22,17 +27,13 @@ def index():
         return "You may now close this page."
 
 
-"""
-Following lines allow application to be run more conveniently with
-`python app.py` (Make sure you're using python3)
-(Also includes directive to leverage pythons threading capacity.)
-"""
-
-
 def main():
+    """
+    Runs authentication callback handler on the correct URI and port.
+    :return:
+    """
     load_dotenv()
-    app.run(threaded=True, port=int(os.environ.get("PORT",
-                                                   os.environ.get("SPOTIPY_REDIRECT_URI", 8080).split(":")[-1])))
+    app.run(port=int(os.environ.get("PORT", os.environ.get("SPOTIPY_REDIRECT_URI", 8080).split(":")[-1])))
 
 
 if __name__ == '__main__':

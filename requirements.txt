@@ -1,9 +1,11 @@
+bitstring==3.1.9
 cachelib==0.2.0
 cachetools==4.2.2
 certifi==2021.5.30
 charset-normalizer==2.0.3
 click==8.0.1
 colorama==0.4.4
+colormath==3.0.0
 Flask==2.0.1
 Flask-Session==0.4.0
 google-api-core==1.31.1
@@ -12,9 +14,13 @@ google-cloud-vision==2.4.2
 googleapis-common-protos==1.53.0
 grpcio==1.39.0
 idna==3.2
+ifaddr==0.1.7
 itsdangerous==2.0.1
 Jinja2==3.0.1
+lifxlan==1.2.7
 MarkupSafe==2.0.1
+networkx==2.6.2
+numpy==1.21.1
 packaging==21.0
 pifx==1.0.1
 proto-plus==1.19.0

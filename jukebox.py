@@ -17,22 +17,23 @@ class Jukebox:
 
     def play(self):
         prev_track = None
-        accumulator = 0
         while True:
             self.spotify_client.wait_for_login()
             track = self.spotify_client.now_playing()
-            if track and (track.get("id") != prev_track or accumulator == 2):
+            if track and (track.get("id") != prev_track):
+                self.lifx_switch.set_scene_pulse(track["album_art_colors"])
                 self.lifx_switch.get_lights(randrange(2, 4))
-                self.lifx_switch.set_scene(track["album_art_colors"])
                 prev_track = track.get("id")
-                accumulator = 0
-            accumulator += 1
             sleep(3)
+
+def start_jukebox():
+    # Allow time for auth app to start in other process
+    sleep(3)
+    Jukebox().play()
 
 def main():
     load_dotenv()
-    jukebox = Jukebox()
-    jb_thread = Thread(target=jukebox.play)
+    jb_thread = Thread(target=start_jukebox())
     jb_thread.start()
     auth_app_main()
 

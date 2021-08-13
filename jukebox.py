@@ -21,7 +21,7 @@ class Jukebox:
             self.spotify_client.wait_for_login()
             track = self.spotify_client.now_playing()
             if track and (track.get("id") != prev_track):
-                self.lifx_switch.set_scene_pulse(track["album_art_colors"])
+                self.lifx_switch.set_scene_pulse(track["album_art_colors"], track["remaining_sec"])
                 self.lifx_switch.get_lights(randrange(2, 4))
                 prev_track = track.get("id")
             sleep(3)

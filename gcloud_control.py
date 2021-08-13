@@ -1,5 +1,5 @@
 from google.cloud import vision
-from itertools import permutations
+from itertools import combinations
 from colormath.color_objects import sRGBColor, LabColor
 from colormath.color_conversions import convert_color
 from colormath.color_diff import delta_e_cie1976
@@ -42,7 +42,7 @@ def get_color_pairs(colors):
     :return:
     """
     return sorted(
-        permutations(colors, 2),
+        combinations(colors, 2),
         key=lambda color_pair: delta_e_cie1976(
             convert_color(color=sRGBColor(rgb_r=color_pair[0][0], rgb_g=color_pair[0][1], rgb_b=color_pair[0][2]), target_cs=LabColor),
             convert_color(color=sRGBColor(rgb_r=color_pair[1][0], rgb_g=color_pair[1][1], rgb_b=color_pair[1][2]), target_cs=LabColor)),

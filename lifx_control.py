@@ -39,7 +39,7 @@ class LifxSwitch:
             else:
                 self.bulbs[selector] = None
 
-    def set_scene_pulse(self, color_pairs):
+    def set_scene_pulse(self, color_pairs, duration):
         """
         Given a list of color pairs and a BPM, sets available lights/zones to pulse between color pairs.
         :param color_pairs:
@@ -47,7 +47,20 @@ class LifxSwitch:
         """
         print("setting pulse")
         # Set bulbs
-        bulb_settings = {bulb_id: color_pairs[index] for index, bulb_id in enumerate(self.bulbs.keys())}
+        bulbs = list(self.bulbs.keys())
+        mid = len(bulbs) // 2
+
+        first_pair = color_pairs[0]
+        second_pair = [pair for pair in color_pairs if pair[0] not in first_pair and pair[1] not in first_pair][0]
+
+        bulb_settings = {
+                ",".join(bulbs[:mid]): first_pair,
+                ",".join(bulbs[mid:]): second_pair
+            }
+
+
+
+        # bulb_settings = {bulb_id: color_pairs[index] for index, bulb_id in enumerate(self.bulbs.keys())}
         # # Set segments
         # for strip_id, strip_segments in self.strips.items():
         #     for index, segment_id in enumerate(strip_segments.keys()):
@@ -65,12 +78,14 @@ class LifxSwitch:
 
         outcomes = []
         print(bulb_settings.items())
+        self.lifx_client.set_states([{"selector": "all", "brightness": float(os.environ.get("LIFX_INTENSITY", 0.8))}])
         for selector, color_pair in bulb_settings.items():
-            print(f"Setting {selector} to {color_pair}")
-            self.pool.submit(set_pulse, kwargs={"light_id": selector, "colors": color_pair})
-
-            outcomes.append(self.pool.submit(set_pulse, args=(selector, color_pair)))
-        as_completed(outcomes)
+            print(f"Setting {selector} to {color_pair} for {duration}")
+            self.lifx_client.breathe_lights(selector=selector,
+                                          from_color=f"rgb:{color_pair[1][0]},{color_pair[1][1]},{color_pair[1][2]}",
+                                          color=f"rgb:{color_pair[0][0]},{color_pair[0][1]},{color_pair[0][2]}", period=30, cycles=duration//30)
+        #     outcomes.append(self.pool.submit(set_pulse, args=(selector, color_pair)))
+        # as_completed(outcomes)
 
     def set_scene(self, colors):
         """

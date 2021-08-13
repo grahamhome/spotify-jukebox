@@ -38,4 +38,5 @@ class SpotifyClient:
                 self.current_track["album"] = track.get("item").get("album").get("name")
                 self.current_track["album_art"] = track.get("item").get("album").get("images")[0].get("url")
                 self.current_track["album_art_colors"] = get_image_colors(self.current_track["album_art"])
+                self.current_track["remaining_sec"] = (track.get("item").get("duration_ms") - track.get("progress_ms")) // 1000
         return self.current_track

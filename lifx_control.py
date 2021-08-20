@@ -127,11 +127,10 @@ class LifxSwitch:
             ]
             bulb_settings.extend(strip_settings)
 
-        def set_lights(states):
-            self.lifx_client.set_states(states)
+        await self.lifx_client.set_states(bulb_settings)
 
-        for setting in bulb_settings:
-            await self.lifx_client.set_state(**setting)
+        # for setting in bulb_settings:
+        #     await self.lifx_client.set_state(**setting)
         # outcomes = []
         # for i in range(0, len(bulb_settings), 2):
         #     outcomes.append(self.pool.submit(set_lights, bulb_settings[i:i+2]))

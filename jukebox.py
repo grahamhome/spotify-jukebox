@@ -28,7 +28,7 @@ class Jukebox:
                 # self.lifx_switch.set_scene_pulse(track["album_art_colors"], track["remaining_sec"])
                 # self.lifx_switch.get_lights(randrange(2, 4))
                 prev_track = track.get("id")
-            sleep(10)
+            sleep(3)
 
 async def start():
     jb = Jukebox()

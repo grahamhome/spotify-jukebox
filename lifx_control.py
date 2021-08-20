@@ -13,12 +13,11 @@ class LifxSwitch:
     def __init__(self):
         self.bulbs = {}
         self.strips = {}
-        self.lifx_client = pifx.PIFX(api_key=os.environ.get("LIFX_KEY"))
-        self.get_lights(self.num_segments)
+        self.lifx_client = pifx.PIFX(api_key=os.environ.get("LIFX_KEY"), is_async=True)
         self.pool = ThreadPoolExecutor(max_workers=10)
 
-    def get_lights(self, num_segments):
-        lights = [light for light in self.lifx_client.list_lights() if light.get("connected")]
+    async def get_lights(self, num_segments):
+        lights = [light for light in await self.lifx_client.list_lights() if light.get("connected")]
         for light in lights:
             selector = f"id:{light.get('id')}"
             if light.get("zones"):
@@ -87,7 +86,7 @@ class LifxSwitch:
         #     outcomes.append(self.pool.submit(set_pulse, args=(selector, color_pair)))
         # as_completed(outcomes)
 
-    def set_scene(self, colors):
+    async def set_scene(self, colors):
         """
         Given a list of colors, sets each available light/zone to a random color.
         :param colors:
@@ -131,7 +130,9 @@ class LifxSwitch:
         def set_lights(states):
             self.lifx_client.set_states(states)
 
-        outcomes = []
-        for i in range(0, len(bulb_settings), 2):
-            outcomes.append(self.pool.submit(set_lights, bulb_settings[i:i+2]))
-        as_completed(outcomes)
+        for setting in bulb_settings:
+            await self.lifx_client.set_state(**setting)
+        # outcomes = []
+        # for i in range(0, len(bulb_settings), 2):
+        #     outcomes.append(self.pool.submit(set_lights, bulb_settings[i:i+2]))
+        # as_completed(outcomes)

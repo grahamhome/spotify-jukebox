@@ -23,15 +23,15 @@ def get_image_colors(image_url):
             'https://cloud.google.com/apis/design/errors'.format(
                 response.error.message))
 
-    return get_color_pairs(
-        [
-            (int(color.color.red), int(color.color.green), int(color.color.blue))
-            for color in response.image_properties_annotation.dominant_colors.colors
-        ]
-    )
-    # return [
-    #     f"rgb:{int(color.color.red)},{int(color.color.green)},{int(color.color.blue)}"
-    #     for color in response.image_properties_annotation.dominant_colors.colors if color.pixel_fraction > 0.009]
+    # return get_color_pairs(
+    #     [
+    #         (int(color.color.red), int(color.color.green), int(color.color.blue))
+    #         for color in response.image_properties_annotation.dominant_colors.colors
+    #     ]
+    # )
+    return [
+        f"rgb:{int(color.color.red)},{int(color.color.green)},{int(color.color.blue)}"
+        for color in response.image_properties_annotation.dominant_colors.colors if color.pixel_fraction > 0.009]
 
 
 def get_color_pairs(colors):

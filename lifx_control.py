@@ -34,7 +34,6 @@ class LifxSwitch:
                     start_index += limit + 1
 
                 self.strips[selector] = sections
-                print(sections)
             else:
                 self.bulbs[selector] = None
 

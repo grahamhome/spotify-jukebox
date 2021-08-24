@@ -1,37 +1,51 @@
+from dotenv import load_dotenv
 from google.cloud import vision
 from itertools import combinations
 from colormath.color_objects import sRGBColor, LabColor
 from colormath.color_conversions import convert_color
 from colormath.color_diff import delta_e_cie1976
+from concurrent import futures
+import asyncio
 
-
-def get_image_colors(image_url):
+class GoogleVision:
     """
-    Returns the predominant colors in the given image.
-    :param image_url:
+    Provides "async" access to the Google Vision API via a threadpool.
+    Future work will issue asynchronous, authenticated requests directly to the Google Vision API.
     :return:
     """
-    client = vision.ImageAnnotatorClient()
-    image = vision.Image()
-    image.source.image_uri = image_url
 
-    response = client.image_properties(image=image)
+    def __init__(self):
+        load_dotenv()
+        self.pool = futures.ThreadPoolExecutor(max_workers=2)
+        self.client = vision.ImageAnnotatorClient()
 
-    if response.error.message:
-        raise Exception(
-            '{}\nFor more info on error messages, check: '
-            'https://cloud.google.com/apis/design/errors'.format(
-                response.error.message))
 
-    # return get_color_pairs(
-    #     [
-    #         (int(color.color.red), int(color.color.green), int(color.color.blue))
-    #         for color in response.image_properties_annotation.dominant_colors.colors
-    #     ]
-    # )
-    return [
-        f"rgb:{int(color.color.red)},{int(color.color.green)},{int(color.color.blue)}"
-        for color in response.image_properties_annotation.dominant_colors.colors if color.pixel_fraction > 0.009]
+    async def get_image_colors(self, image_url):
+        """
+        Returns the predominant colors in the given image.
+        :param image_url:
+        :return:
+        """
+        image = vision.Image()
+        image.source.image_uri = image_url
+
+        response = await asyncio.get_event_loop().run_in_executor(self.pool, self.client.image_properties, image)
+
+        if response.error.message:
+            raise Exception(
+                '{}\nFor more info on error messages, check: '
+                'https://cloud.google.com/apis/design/errors'.format(
+                    response.error.message))
+
+        # return get_color_pairs(
+        #     [
+        #         (int(color.color.red), int(color.color.green), int(color.color.blue))
+        #         for color in response.image_properties_annotation.dominant_colors.colors
+        #     ]
+        # )
+        return [
+            f"rgb:{int(color.color.red)},{int(color.color.green)},{int(color.color.blue)}"
+            for color in response.image_properties_annotation.dominant_colors.colors if color.pixel_fraction > 0.009]
 
 
 def get_color_pairs(colors):

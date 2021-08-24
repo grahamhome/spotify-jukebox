@@ -27,7 +27,6 @@ async def start_interface(spotify):
     server = await asyncio.start_server(get_request_handler(spotify), "127.0.0.1", 8080)
 
     async with server:
-        print("server running")
         await server.serve_forever()
 
 

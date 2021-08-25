@@ -15,7 +15,7 @@ def get_request_handler(spotify):
         message = data.decode()
         if results := re.search(params_regex, message):
             print("Updating Spotify token")
-            spotify.update_token(results.group(1), results.group(2))
+            await spotify.update_token(results.group(1), results.group(2))
         writer.write(b"HTTP/1.0 200 OK\r\n\r\nYou may now close this window.\r\n")
         await writer.drain()
         writer.close()

@@ -1,5 +1,4 @@
 from typing import List
-from pprint import pprint
 
 from gcloud_control import GoogleVision
 

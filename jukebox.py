@@ -16,7 +16,7 @@ def main():
     lifx = Lifx(now_playing, loop)
 
     async def run():
-        await asyncio.gather(spotify.update_now_playing(), spotify.update_pause_state(), lifx.setup(), lifx.follow())
+        await asyncio.gather(spotify.retrieve_token(), spotify.update_now_playing(), spotify.update_pause_state(), lifx.setup(), lifx.follow())
 
     loop.create_task(run())
     loop.run_until_complete(start_interface(spotify))

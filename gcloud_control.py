@@ -1,3 +1,4 @@
+import aiohttp
 from dotenv import load_dotenv
 from google.cloud import vision
 from itertools import combinations
@@ -19,6 +20,13 @@ class GoogleVision:
         self.pool = futures.ThreadPoolExecutor(max_workers=2)
         self.client = vision.ImageAnnotatorClient()
 
+    async def download_image(self, image_url):
+        async with aiohttp.ClientSession(loop=asyncio.get_event_loop()) as session:
+            async with session.get(image_url) as response:
+                if response.status == 200:
+                    image_data = await response.read()
+                    return image_data
+
 
     async def get_image_colors(self, image_url):
         """
@@ -26,8 +34,7 @@ class GoogleVision:
         :param image_url:
         :return:
         """
-        image = vision.Image()
-        image.source.image_uri = image_url
+        image = vision.Image(content=await self.download_image(image_url))
 
         response = await asyncio.get_event_loop().run_in_executor(self.pool, self.client.image_properties, image)
 

@@ -36,3 +36,6 @@ gcloud_creds.json
 .flask_session/
 .spotify_caches/
 .spotify_cache
+
+# Logs
+**/*.log

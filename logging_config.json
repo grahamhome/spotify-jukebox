@@ -1,0 +1,67 @@
+{
+    "version": 1,
+    "loggers": {
+        "": {
+            "level": "NOTSET",
+            "handlers": ["info_rotating_file_handler", "error_file_handler"]
+        },
+        "jukebox": {
+            "level": "INFO",
+            "propagate": "false",
+            "handlers": ["info_rotating_file_handler", "error_file_handler" ]
+        },
+        "spotify": {
+          "level": "INFO",
+            "propagate": "false",
+            "handlers": ["info_rotating_file_handler", "error_file_handler" ]
+        },
+        "lifx": {
+            "level": "INFO",
+            "propagate": "false",
+            "handlers": ["info_rotating_file_handler", "error_file_handler" ]
+        },
+        "gcloud": {
+          "level": "INFO",
+          "propagate": "false",
+          "handlers": ["info_rotating_file_handler", "error_file_handler" ]
+        },
+        "web": {
+              "level": "INFO",
+              "propagate": "false",
+              "handlers": ["info_rotating_file_handler", "error_file_handler" ]
+        }
+    },
+    "handlers": {
+        "debug_console_handler": {
+            "level": "DEBUG",
+            "formatter": "info",
+            "class": "logging.StreamHandler",
+            "stream": "ext://sys.stdout"
+        },
+        "info_rotating_file_handler": {
+            "level": "INFO",
+            "formatter": "info",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": "jukebox.log",
+            "mode": "a",
+            "maxBytes": 1048576,
+            "backupCount": 10
+        },
+        "error_file_handler": {
+            "level": "WARNING",
+            "formatter": "error",
+            "class": "logging.FileHandler",
+            "filename": "jukebox-error.log",
+            "mode": "a"
+        }
+    },
+    "formatters": {
+        "info": {
+            "format": "%(asctime)s %(levelname)s %(name)s::%(module)s|%(lineno)s:: %(message)s"
+        },
+        "error": {
+            "format": "%(asctime)s %(levelname)s %(name)s %(process)d::%(module)s|%(lineno)s:: %(message)s"
+        }
+    }
+
+}

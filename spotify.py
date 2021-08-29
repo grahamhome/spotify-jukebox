@@ -4,6 +4,7 @@ from pprint import pprint
 import asyncio
 from dotenv import load_dotenv
 import os
+import logging
 
 from song import Song
 
@@ -12,14 +13,15 @@ class Spotify:
     Interface to the Spotify API
     """
     token_file = "spotify_token.tok"
+    logger = logging.getLogger("spotify")
 
     def __init__(self, now_playing: Song):
-        load_dotenv()
         self.config = tk.config_from_environment()
         self.creds = tk.Credentials(*self.config)
         self.auth = tk.UserAuth(self.creds, tk.scope.user_read_currently_playing)
         self.client = tk.Spotify(asynchronous=True)
         self.now_playing = now_playing
+        self.logger.info("Spotify client created")
 
     def auth_url(self):
         """
@@ -62,6 +64,7 @@ class Spotify:
                     self.client.token = self.creds.refresh(self.client.token)
                 current_track_data = await self.client.playback_currently_playing()
                 if current_track_data and current_track_data.item and current_track_data.item.id != self.now_playing.spotify_id:
+                    self.logger.info(f"New song detected: {current_track_data.item.name}")
                     await self.now_playing.update(
                         spotify_id=current_track_data.item.id,
                         title=current_track_data.item.name,

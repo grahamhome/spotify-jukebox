@@ -21,13 +21,12 @@ class Lifx:
         self.now_playing = now_playing
 
     async def setup(self):
-        zone_count = randrange(2, 4)
         lights = [light for light in await self.lifx_client.list_lights() if light.get("connected")]
         for light in lights:
             selector = f"id:{light.get('id')}"
             if light.get("zones"):
                 num_zones = light.get("zones").get("count")
-                limit = num_zones // zone_count
+                limit = num_zones // self.num_segments
                 sections = {}
                 start_index = 0
                 stop_index = 0
@@ -41,6 +40,9 @@ class Lifx:
                 self.strips[selector] = sections
             else:
                 self.bulbs[selector] = None
+
+        self.ids = list(self.bulbs.keys())
+        self.ids.extend([segment_id for segment in self.strips.values() for segment_id in segment])
         self.initialized = True
 
     async def set_scene(self, colors):
@@ -50,12 +52,11 @@ class Lifx:
         :return:
         """
         shuffle(colors)
-        ids = list(self.bulbs.keys())
-        ids.extend([segment_id for segment in self.strips.values() for segment_id in segment])
-        if len(ids) > len(colors):
-            id_color_pairs = zip(ids, cycle(colors))
+
+        if len(self.ids) > len(colors):
+            id_color_pairs = zip(self.ids, cycle(colors))
         else:
-            id_color_pairs = zip(cycle(ids), colors)
+            id_color_pairs = zip(cycle(self.ids), colors)
 
         settings = [
             {

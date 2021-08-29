@@ -1,6 +1,8 @@
 import asyncio
 import re
+import logging
 
+logger = logging.getLogger("web")
 params_regex = r"code=(\S+)&state=(\S+)\s"
 
 

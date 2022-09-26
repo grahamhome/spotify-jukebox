@@ -6,10 +6,12 @@ import logging
 
 from song import Song
 
+
 class Spotify:
     """
     Interface to the Spotify API
     """
+
     token_file = "spotify/spotify_token.tok"
     logger = logging.getLogger("spotify")
 
@@ -61,15 +63,22 @@ class Spotify:
                 if self.client.token.is_expiring:
                     self.client.token = self.creds.refresh(self.client.token)
                 current_track_data = await self.client.playback_currently_playing()
-                if current_track_data and current_track_data.item and current_track_data.item.id != self.now_playing.spotify_id:
+                if (
+                    current_track_data
+                    and current_track_data.item
+                    and current_track_data.item.id != self.now_playing.spotify_id
+                ):
                     self.logger.info(f"New song detected: {current_track_data.item.name}")
                     await self.now_playing.update(
                         spotify_id=current_track_data.item.id,
                         title=current_track_data.item.name,
                         artists=[artist.name for artist in current_track_data.item.artists],
                         album=current_track_data.item.album.name,
-                        album_art=max(current_track_data.item.album.images, key=lambda image: image.height).url,
-                        lyrics=""
+                        album_art=max(
+                            current_track_data.item.album.images,
+                            key=lambda image: image.height,
+                        ).url,
+                        lyrics="",
                     )
                 await asyncio.sleep(3)
             else:

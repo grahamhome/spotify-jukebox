@@ -9,6 +9,7 @@ def file_logger(function=None, filename="default.json"):
     :param function:
     :return:
     """
+
     def _log_json(function):
         @wraps(function)
         def json_logger(*args, **kwargs):
@@ -27,7 +28,9 @@ def file_logger(function=None, filename="default.json"):
                     with open(filename, "w") as f:
                         json.dump(result, f)
                 except:
-                    print(f"Unable to log output, output was not JSON.\nOutput: {result}\nException: {sys.exc_info()[0]}")
+                    print(
+                        f"Unable to log output, output was not JSON.\nOutput: {result}\nException: {sys.exc_info()[0]}"
+                    )
             else:
                 print("Function returned None, result not logged")
 

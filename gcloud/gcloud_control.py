@@ -16,6 +16,7 @@ class GoogleVision:
     Future work will issue asynchronous, authenticated requests directly to the Google Vision API.
     :return:
     """
+
     logger = logging.getLogger("gcloud")
 
     def __init__(self):
@@ -33,7 +34,6 @@ class GoogleVision:
                     self.logger.info(f"Received data for {image_url}")
                     return image_data
 
-
     async def get_image_colors(self, image_url):
         """
         Returns the predominant colors in the given image.
@@ -46,9 +46,10 @@ class GoogleVision:
         response = await asyncio.get_event_loop().run_in_executor(self.pool, self.client.image_properties, image)
 
         if response.error.message:
-            self.logger.error(f"{response.error.message}\nFor more info on error messages, check: 'https://cloud.google.com/apis/design/errors")
+            self.logger.error(
+                f"{response.error.message}\nFor more info on error messages, check: 'https://cloud.google.com/apis/design/errors"
+            )
             return []
-
 
         # return get_color_pairs(
         #     [
@@ -59,7 +60,8 @@ class GoogleVision:
 
         return [
             f"rgb:{int(color.color.red)},{int(color.color.green)},{int(color.color.blue)}"
-            for color in response.image_properties_annotation.dominant_colors.colors]
+            for color in response.image_properties_annotation.dominant_colors.colors
+        ]
 
 
 def get_color_pairs(colors):
@@ -72,6 +74,22 @@ def get_color_pairs(colors):
     return sorted(
         combinations(colors, 2),
         key=lambda color_pair: delta_e_cie1976(
-            convert_color(color=sRGBColor(rgb_r=color_pair[0][0], rgb_g=color_pair[0][1], rgb_b=color_pair[0][2]), target_cs=LabColor),
-            convert_color(color=sRGBColor(rgb_r=color_pair[1][0], rgb_g=color_pair[1][1], rgb_b=color_pair[1][2]), target_cs=LabColor)),
-        reverse=True)
+            convert_color(
+                color=sRGBColor(
+                    rgb_r=color_pair[0][0],
+                    rgb_g=color_pair[0][1],
+                    rgb_b=color_pair[0][2],
+                ),
+                target_cs=LabColor,
+            ),
+            convert_color(
+                color=sRGBColor(
+                    rgb_r=color_pair[1][0],
+                    rgb_g=color_pair[1][1],
+                    rgb_b=color_pair[1][2],
+                ),
+                target_cs=LabColor,
+            ),
+        ),
+        reverse=True,
+    )

@@ -29,7 +29,9 @@ class Lifx:
         for light in lights:
             selector = f"id:{light.get('id')}"
             if light.get("zones"):
-                self.logger.info(f"{light.get('label')} is a strip or beam with {light.get('zones').get('count')} zones")
+                self.logger.info(
+                    f"{light.get('label')} is a strip or beam with {light.get('zones').get('count')} zones"
+                )
                 num_zones = light.get("zones").get("count")
                 limit = num_zones // self.num_segments
                 sections = {}
@@ -43,8 +45,10 @@ class Lifx:
                     start_index += limit + 1
 
                 self.strips[selector] = sections
-                self.logger.info(f"{light.get('label')} will be divided into {self.num_segments} segments: "
-                                 f"{', '.join([segment for segment in sections.keys()])}")
+                self.logger.info(
+                    f"{light.get('label')} will be divided into {self.num_segments} segments: "
+                    f"{', '.join([segment for segment in sections.keys()])}"
+                )
 
             else:
                 self.bulbs[selector] = None
@@ -54,7 +58,6 @@ class Lifx:
         self.ids.extend([segment_id for segment in self.strips.values() for segment_id in segment])
         self.initialized = True
         self.logger.info("Finished detecting lights.")
-
 
     async def set_scene(self, colors):
         """
@@ -76,8 +79,9 @@ class Lifx:
                 "color": color,
                 "power": "on",
                 "brightness": float(os.environ.get("LIFX_INTENSITY", 0.5)),
-                "duration": 1
-            } for selector, color in id_color_pairs
+                "duration": 1,
+            }
+            for selector, color in id_color_pairs
         ]
 
         await self.lifx_client.set_states(settings)
@@ -86,10 +90,14 @@ class Lifx:
 
     async def follow(self):
         while 1:
-            if self.follow_on and self.initialized and self.now_playing.album_art_colors and not self.now_playing.paused:
+            if (
+                self.follow_on
+                and self.initialized
+                and self.now_playing.album_art_colors
+                and not self.now_playing.paused
+            ):
                 self.logger.info("Setting scene")
                 await self.set_scene(self.now_playing.album_art_colors)
                 await asyncio.sleep(5)
             else:
                 await asyncio.sleep(1)
-

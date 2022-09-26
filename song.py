@@ -2,10 +2,12 @@ from typing import List
 
 from gcloud.gcloud_control import GoogleVision
 
+
 class Song:
     """
     Contains details about a song.
     """
+
     vision = GoogleVision()
 
     def __init__(self):
@@ -18,7 +20,15 @@ class Song:
         self.lyrics = None
         self.paused = False
 
-    async def update(self, spotify_id: str, title: str, artists: List[str], album: str, album_art: str, lyrics: str):
+    async def update(
+        self,
+        spotify_id: str,
+        title: str,
+        artists: List[str],
+        album: str,
+        album_art: str,
+        lyrics: str,
+    ):
         """
         Update fields with new values.
         :param spotify_id:

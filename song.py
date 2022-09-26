@@ -1,6 +1,6 @@
 from typing import List
 
-from gcloud_control import GoogleVision
+from gcloud.gcloud_control import GoogleVision
 
 class Song:
     """

@@ -24,14 +24,13 @@ Run app.py
 """
 
 import os
-from pprint import pprint, pformat
+from pprint import pprint
 
 from flask import Flask, session, request, redirect
 from flask_session import Session
 import spotipy
 import uuid
-from dotenv import load_dotenv
-from gcloud_control import get_image_colors
+from gcloud.gcloud_control import get_image_colors
 from lifx_control import list_lights, set_scene
 
 app = Flask(__name__)

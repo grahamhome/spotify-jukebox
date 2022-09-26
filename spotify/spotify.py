@@ -1,8 +1,6 @@
 import aiofiles
 import tekore as tk
-from pprint import pprint
 import asyncio
-from dotenv import load_dotenv
 import os
 import logging
 
@@ -12,7 +10,7 @@ class Spotify:
     """
     Interface to the Spotify API
     """
-    token_file = "spotify_token.tok"
+    token_file = "spotify/spotify_token.tok"
     logger = logging.getLogger("spotify")
 
     def __init__(self, now_playing: Song):

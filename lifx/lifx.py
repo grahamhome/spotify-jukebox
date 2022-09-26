@@ -1,9 +1,8 @@
 from itertools import cycle
-from pprint import pprint
 
 import pifx
 import os
-from random import choice, randrange, shuffle
+from random import shuffle
 
 from song import Song
 import asyncio

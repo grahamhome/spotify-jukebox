@@ -42,7 +42,7 @@
             "level": "INFO",
             "formatter": "info",
             "class": "logging.handlers.RotatingFileHandler",
-            "filename": "jukebox.log",
+            "filename": "logging/logs/jukebox.log",
             "mode": "a",
             "maxBytes": 1048576,
             "backupCount": 10
@@ -51,7 +51,7 @@
             "level": "WARNING",
             "formatter": "error",
             "class": "logging.FileHandler",
-            "filename": "jukebox-error.log",
+            "filename": "logging/logs/jukebox-error.log",
             "mode": "a"
         }
     },

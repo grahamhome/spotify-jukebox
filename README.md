@@ -1,5 +1,5 @@
 # Spotify-Jukebox
-Sync your lights and music to make yor whole house a jukebox!
+Sync your lights and music to make your whole house a jukebox!
 
 ## Current progress:
 * Main service syncs lights with album artwork colors!

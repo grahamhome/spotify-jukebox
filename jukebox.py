@@ -1,6 +1,7 @@
 import logging
 import logging.config
 import json
+from aiohttp import web
 
 with open("logging_config.json", "r") as f:
     logging.config.dictConfig(config=json.load(f))
@@ -11,7 +12,8 @@ from dotenv import load_dotenv
 from lifx import Lifx
 from song import Song
 from spotify import Spotify
-from web_interface import start_interface
+from web_interface_2 import start_web_interface
+# from web_interface import start_interface
 
 
 logger = logging.getLogger("jukebox")
@@ -25,10 +27,11 @@ def main():
     lifx = Lifx(now_playing, loop)
 
     async def run():
-        await asyncio.gather(spotify.retrieve_token(), spotify.update_now_playing(), spotify.update_pause_state(), lifx.setup(), lifx.follow())
+        await asyncio.gather(web._run_app(start_web_interface(spotify), host="127.0.0.1"), spotify.retrieve_token(), spotify.update_now_playing(), spotify.update_pause_state(), lifx.setup(), lifx.follow())
 
     loop.create_task(run())
-    loop.run_until_complete(start_interface(spotify))
+
+    # loop.run_until_complete(start_interface(spotify))
 
     loop.run_forever()
 

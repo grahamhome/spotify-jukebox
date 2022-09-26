@@ -39,3 +39,6 @@ gcloud_creds.json
 
 # Logs
 **/*.log
+
+# Spoitify token
+*.tok
